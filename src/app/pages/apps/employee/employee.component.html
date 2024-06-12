@@ -1,0 +1,342 @@
+<div class="col-lg-12">
+  <mat-card class="b-1 ">
+    <mat-card-content class="b-t-1">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="d-flex align-items-center">
+              <mat-icon>
+                <i-tabler name="users" class="icon-20 m-r-8"></i-tabler>
+              </mat-icon>
+            </div>
+            Users
+          </ng-template>
+          <div class=" mat-body-1 p-16 rounded m-t-12">
+           <mat-card class="cardWithShadow">
+            <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input
+            matInput
+            placeholder="Search Employee"
+            (keyup)="applyFilter($any($event.target).value)"
+          />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+        <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+          Invite Employee
+        </button>
+      </div>
+    </div>
+              </mat-card-content>
+            </mat-card>
+           <mat-card class="cardWithShadow">
+           <mat-card-content class="p-24">
+                  <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+        <ng-container matColumnDef="#">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Name</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex align-items-center">
+              <img
+                class="rounded-circle"
+                [src]="element.imagePath"
+                width="40"
+              />
+              <div class="m-l-16">
+                <p class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                  {{ element.Name }}
+                </p>
+                <small class="mat-body-1 f-s-14">{{ element.Position }}</small>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Email
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.Email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="number">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Number
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+           
+            
+              <!-- <mat-tree [dataSource]="dataSource2" [treeControl]="treeControl">
+                <mat-tree-node
+                  *matTreeNodeDef="let node"
+                  matTreeNodeToggle
+                  matTreeNodePadding
+                >
+                  <button mat-icon-button disabled></button>
+                  <mat-checkbox
+                    class="checklist-leaf-node"
+                    [checked]="checklistSelection.isSelected(node)"
+                    (change)="todoLeafItemSelectionToggle(node)" color="primary"
+                    >{{ node.item }}</mat-checkbox
+                  >
+                </mat-tree-node>
+          
+                <mat-tree-node
+                  *matTreeNodeDef="let node; when: hasNoContent"
+                  matTreeNodePadding
+                >
+                  <button mat-icon-button disabled></button>
+                  <div class="d-flex align-items-center m-b-8">
+                    <mat-form-field appearance="outline" class="m-r-12 hide-hint">
+                      <mat-label>New item...</mat-label>
+                      <input matInput #itemValue placeholder="Ex. Lettuce" />
+                    </mat-form-field>
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      (click)="saveNode(node, itemValue.value)"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </mat-tree-node>
+          
+                <mat-tree-node
+                  *matTreeNodeDef="let node; when: hasChild"
+                  matTreeNodePadding
+                >
+                  <button
+                    mat-icon-button
+                    matTreeNodeToggle
+                    [attr.aria-label]="'Toggle ' + node.item"
+                  >
+                    <mat-icon class="mat-icon-rtl-mirror">
+                      {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+                    </mat-icon>
+                  </button>
+                  <mat-checkbox
+                    [checked]="descendantsAllSelected(node)"
+                    [indeterminate]="descendantsPartiallySelected(node)"
+                    (change)="todoItemSelectionToggle(node)" color="primary"
+                    >{{ node.item }}</mat-checkbox
+                  >
+                  <button mat-icon-button (click)="addNewItem(node)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </mat-tree-node>
+              </mat-tree> -->
+              <mat-tree [dataSource]="dataSource2" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                  <div class="node-content">
+                    {{ node.item }}
+                  </div>
+                </mat-tree-node>
+              
+                <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+                  <div class="node-content">
+                    <mat-form-field appearance="outline" class="m-r-12 hide-hint">
+                      <mat-label>New item...</mat-label>
+                      <input matInput #itemValue placeholder="Ex. Lettuce" />
+                    </mat-form-field>
+                    <button mat-flat-button color="primary" (click)="saveNode(node, itemValue.value)">
+                      Save
+                    </button>
+                  </div>
+                </mat-tree-node>
+              
+                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                  <div class="node-content">
+                    <div class="expander" (click)="treeControl.toggle(node)">
+                      <mat-icon class="mat-icon-rtl-mirror">
+                        {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+                      </mat-icon>
+                    </div>
+                    {{ node.item }}
+                  </div>
+                </mat-tree-node>
+              </mat-tree>
+              
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date of joining">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Date of Joining
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.DateOfJoining | date : "fullDate" }}
+          </td>
+        </ng-container>
+
+       <!--  <ng-container matColumnDef="salary">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Salary
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.Salary }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="projects">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Projects
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.Projects }}
+          </td>
+        </ng-container> -->
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a
+              (click)="openDialog('Update', element)"
+              class="m-r-10 cursor-pointer"
+              ><i-tabler name="edit" class="icon-18"></i-tabler
+            ></a>
+            <a
+              (click)="openDialog('Delete', element)"
+              class="m-r-10 cursor-pointer"
+            >
+              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+  </mat-card-content>
+             </mat-card>
+
+          </div>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="d-flex align-items-center">
+              <mat-icon>
+                <i-tabler name="users-group" class="icon-20 m-r-8"></i-tabler>
+              </mat-icon>
+            </div>
+            Teams
+          </ng-template>
+
+          <div class=" mat-body-1 p-16 rounded m-t-12"> 
+            <mat-card class="cardWithShadow">
+              <mat-card-content class="p-24">
+            <div class="row flex-column"style="display: flex; justify-content: center; align-items: center;">
+              @for(followercard of followercards; track followercard.title) {
+                <div class="row" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                  <div class="col-sm-6 col-lg-4">
+                    <mat-card class="cardWithShadow">
+                      <mat-card-content>
+                        <div class="d-flex align-items-center">
+                          <div class="d-flex align-items-center">
+                            <img src="{{ followercard.imgSrc }}" width="40" alt="user" class="rounded-circle" />
+                            <div class="m-l-16">
+                              <h6 class="m-0 f-w-600 f-s-16">{{ followercard.title }}</h6>
+                              <span class="d-flex align-items-center f-s-14"><i-tabler name="map-pin"
+                                  class="icon-14 m-r-4"></i-tabler>{{ followercard.subtext }}</span>
+                            </div>
+                          </div>
+                          <button mat-flat-button color="primary" class="m-l-auto">
+                            Follow
+                          </button>
+                        </div>
+                        
+                      </mat-card-content>
+                    </mat-card>
+                  </div>
+                  <div class="col-6">
+                        <mat-expansion-panel hideToggle class="cardWithShadow">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title class="f-w-600 mat-body-1"style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                              Members
+                            </mat-panel-title>
+                            
+                          </mat-expansion-panel-header>
+                          <mat-card class="cardWithShadow">
+                            <mat-card-content>
+                              <div class="table-responsive m-t-30">
+                                <table mat-table [dataSource]="dataSource1" class="w-100">
+                                  <!-- Position Column -->
+                                  <ng-container matColumnDef="assigned">
+                                    <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14 p-l-0">
+                                      Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" class="p-l-0">
+                                      <div class="d-flex align-items-center">
+                                        <img [src]="element.imagePath" alt="users" width="40" class="rounded-circle" />
+                                        <div class="m-l-16">
+                                          <h6 class="mat-subtitle-1 f-s-14 f-w-600">
+                                            {{ element.uname }}
+                                          </h6>
+                                          <span class="mat-body-1 f-s-12">
+                                            {{ element.position }}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </ng-container>
+                          
+                                  <!-- Name Column -->
+                                  <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
+                                      Number
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" class="mat-body-1">
+                                      {{ element.productName }}
+                                    </td>
+                                  </ng-container>
+                          
+                                  <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                                  <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
+                                </table>
+                              </div>
+                            </mat-card-content>
+                          </mat-card>
+                        </mat-expansion-panel>
+                      
+                  </div>
+            </div>
+              }
+            </div>
+          </mat-card-content>
+          </mat-card>
+          </div>
+        </mat-tab>
+       <!--  <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="d-flex align-items-center">
+              <mat-icon>
+                <i-tabler name="user" class="icon-20 m-r-8"></i-tabler>
+              </mat-icon>
+            </div>
+            Item Three
+          </ng-template>
+          <div class="bg-light-primary mat-body-1 p-16 rounded m-t-12">
+            Content 3
+          </div>
+        </mat-tab> -->
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>

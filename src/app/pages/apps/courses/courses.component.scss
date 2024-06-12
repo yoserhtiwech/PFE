@@ -1,0 +1,76 @@
+.cardWithShadow {
+  position: absolute; /* Use absolute positioning */
+  top: 61%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust both horizontal and vertical position */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type="text"] {
+  width: 200px;
+  height: 30px;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transition: border-color 0.3s, box-shadow 0.3s; 
+  border-color: #010202; 
+  
+} 
+
+
+.key {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin: 12px;
+  cursor: pointer;
+  line-height: 50px; 
+  font-weight: bold; /* Make the numbers thicker */
+  font-family: 'Roboto', sans-serif; 
+  font-size: 20px;
+  transition: background-color 0.3s; /* Add transition effect */ 
+ 
+}
+.key span {
+  display: block;
+  transition: color 0.3s; /* Add transition effect */ 
+  font-size: 10px; /* Adjust font size of letters */
+  position: absolute;
+  bottom: -20px; /* Position letters below the numbers */
+  width: 100%;
+  text-align: center;
+ 
+}
+.key:hover  {
+  color: red; /* Change color on hover */
+}
+.button {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin: 20px;
+  cursor: pointer;
+  line-height: 50px;
+  font-size: 15px;
+  border: 1px solid ; 
+  border-radius: 15px; /* Add rounded corners */
+  transition: border-color 0.3s; /* Add transition effect */
+  padding: 0%; 
+  background-color: transparent;
+  border-color:transparent;
+  
+ 
+} 
+.button img { 
+  border-radius: 0px;
+  width: 100%;
+  height:100%;
+}
+.button:hover {
+  background-color:gray
+} 

@@ -1,0 +1,25 @@
+.node-content {
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .node-content .expander {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+  }
+  
+  .node-content mat-icon {
+    font-size: 20px;
+    vertical-align: middle;
+  }
+  
+  .hide-hint .mat-hint {
+    display: none;
+  }
+  

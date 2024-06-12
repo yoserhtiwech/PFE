@@ -1,0 +1,319 @@
+<link rel="stylesheet" href="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.css">
+<mat-card class="cardWithShadow">
+ 
+    <mat-card-content>
+      <div class="d-flex align-items-center">
+        <mat-card-title class="m-b-0"><h1>logs</h1></mat-card-title>
+        <div class="m-l-auto">
+          <button mat-flat-button color="primary" style="margin: 10px;" (click)="toggleFilter()" >
+            Filter
+          </button>
+          <button mat-flat-button color="primary" (click)="toggleStats()">
+            Stats
+          </button>
+
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card class="container1 cardWithShadow" *ngIf="showStats">
+      <div class="d-flex align-items-center">
+      <div class="col-lg-5">
+        
+            <apx-chart
+              [series]="doughnutChartOptions.series"
+              [chart]="doughnutChartOptions.chart"
+              [dataLabels]="doughnutChartOptions.dataLabels"
+              [plotOptions]="doughnutChartOptions.plotOptions"
+              [legend]="doughnutChartOptions.legend"
+              [colors]="doughnutChartOptions.colors"
+              [tooltip]="doughnutChartOptions.tooltip"
+            >
+            </apx-chart>
+         
+      </div>
+      <div class="col-lg-7">
+     
+          <apx-chart
+            [series]="areaChartOptions.series"
+            [chart]="areaChartOptions.chart"
+            [xaxis]="areaChartOptions.xaxis"
+            [yaxis]="areaChartOptions.yaxis"
+            [grid]="areaChartOptions.grid"
+            [stroke]="areaChartOptions.stroke"
+            [tooltip]="areaChartOptions.tooltip"
+            [dataLabels]="areaChartOptions.dataLabels"
+            [legend]="areaChartOptions.legend"
+            [colors]="areaChartOptions.colors"
+            [markers]="areaChartOptions.markers"
+          >
+          </apx-chart>
+      </div>
+      </div>
+    </mat-card>
+    
+    <!-- <mat-card class="container cardWithShadow" *ngIf="showFilter">
+      <div class="col-sm-6 align-items-center" style="width: 380px; margin-top: 20px; margin-bottom: 0%;">
+        <mat-card class="calls cardWithShadow">
+            <mat-button-toggle-group  name="fontStyle" aria-label="Font Style">
+              <mat-button-toggle value="bold">All Calls</mat-button-toggle>
+              <mat-button-toggle value="italic">Only Standars</mat-button-toggle>
+              <mat-button-toggle value="underline">Only Direct Lines</mat-button-toggle>
+            </mat-button-toggle-group>
+     
+     </mat-card>
+      </div>
+     
+    
+      <br>
+      <div class="d-flex align-items-start  gap-8" style="margin-top: 0%;">
+        <div class="col-sm-2">
+          <mat-card class="cardWithShadow ">
+          <mat-button-toggle-group class="vertical-toggle-group" name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle value="bold">Calls</mat-button-toggle>
+            <mat-button-toggle value="italic">Calls</mat-button-toggle>
+            <mat-button-toggle value="underline">Calls</mat-button-toggle>
+          </mat-button-toggle-group>
+        </mat-card>
+    </div> 
+    <div  style="width: 260px;">
+        
+      <mat-card class="b-1 shadow-none">
+        <mat-card-header>
+          <mat-card-title>Calls-Type</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="b-t-1">
+          <mat-selection-list #shoes> 
+            <mat-list-option> 
+              Missed Calls
+            </mat-list-option>
+            <mat-list-option> 
+              Answered Calls
+            </mat-list-option>
+            <mat-list-option> 
+              Outgoing Calls
+            </mat-list-option>
+          </mat-selection-list>   
+        </mat-card-content>     
+      </mat-card>
+    </div>
+      <div >
+            <mat-card class="demo-inline-calendar-card cardWithShadow" style="margin: 0%;width: 220px;">
+              <mat-calendar [(selected)]="selected"></mat-calendar>
+            </mat-card>
+            <p class="mat-subtitle-2 f-w-600 m-t-16">
+              Selected date: {{ selected }}
+            </p>
+      </div>
+       <div >
+            <mat-card class="demo-inline-calendar-card cardWithShadow" style="margin: 0%;;width: 220px;">
+              <mat-calendar [(selected)]="selected"></mat-calendar>
+            </mat-card>
+            <p class="mat-subtitle-2 f-w-600 m-t-16">
+              Selected date: {{ selected }}
+            </p>
+      </div>
+      <div  style="width: 220px;">
+       
+        <mat-card class="b-1 shadow-none">
+          <mat-card-header>
+            <mat-card-title>ShortCuts</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="b-t-1">
+            <mat-selection-list #shoes> 
+              <mat-list-option> 
+                Today
+              </mat-list-option>
+              <mat-list-option> 
+                Yesterday
+              </mat-list-option>
+              <mat-list-option> 
+                Last 15 days
+              </mat-list-option>
+              <mat-list-option> 
+                This week
+              </mat-list-option>
+              <mat-list-option> 
+                Last Week
+              </mat-list-option>
+
+            </mat-selection-list> 
+          </mat-card-content>       
+        </mat-card>
+      </div>
+    </div> 
+    <br>
+    <div class="d-flex align-items-start">
+      <div
+              class="d-flex flex-sm-row flex-column align-items  gap-8 col-sm-2"
+            >
+    <button mat-raised-button color="primary"Style="with=20px">Apply</button>
+    <button mat-raised-button color="accent">Reset</button>
+   </div>
+  </div>
+    </mat-card> -->
+    <mat-card class="container cardWithShadow" *ngIf="showFilter">
+      <div class="content-wrapper">
+        <mat-card class="calls cardWithShadow">
+          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle value="bold">All Calls</mat-button-toggle>
+            <mat-button-toggle value="italic">Only Standards</mat-button-toggle>
+            <mat-button-toggle value="underline">Only Direct Lines</mat-button-toggle>
+          </mat-button-toggle-group>
+        </mat-card>
+      </div>
+    
+      <div class="cards-wrapper">
+        <mat-card class="b-1 shadow-none">
+          <mat-card-header>
+            <mat-card-title>Calls-Type</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="b-t-1">
+            <mat-selection-list #shoes>
+              <mat-list-option>Missed Calls</mat-list-option>
+              <mat-list-option>Answered Calls</mat-list-option>
+              <mat-list-option>Outgoing Calls</mat-list-option>
+              <mat-list-option>Voicemails</mat-list-option>
+            </mat-selection-list>
+          </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="demo-inline-calendar-card cardWithShadow">
+          <mat-calendar [(selected)]="selected"></mat-calendar>
+        </mat-card>
+        <mat-card class="demo-inline-calendar-card cardWithShadow">
+          <mat-calendar [(selected)]="selected"></mat-calendar>
+        </mat-card>
+    
+        <mat-card class="b-1 shadow-none">
+          <mat-card-header>
+            <mat-card-title>ShortCuts</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="b-t-1">
+            <mat-selection-list #shoes>
+              <mat-list-option>Today</mat-list-option>
+              <mat-list-option>Yesterday</mat-list-option>
+              <mat-list-option>Last 15 days</mat-list-option>
+              <mat-list-option>This week</mat-list-option>
+              <mat-list-option>Last Week</mat-list-option>
+            </mat-selection-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    
+      <div class="button-group">
+        <button mat-raised-button color="primary">Apply</button>
+        <button mat-raised-button color="accent">Reset</button>
+      </div>
+    </mat-card>
+    
+  <mat-card-content>
+    <div class="m-t-30 table-responsive-sm">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+        @for(column of columnsToDisplay; track column) {
+        <ng-container matColumnDef="{{ column }}">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="f-w-600 mat-subtitle-1 f-s-14 p-x-24 p-l-0"
+          >
+            {{ column | titlecase }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="p-x-24 f-s-14 p-l-0">
+            {{ element[column] }}
+          </td>
+        </ng-container>
+        }
+
+        <ng-container matColumnDef="expand">
+          <th mat-header-cell *matHeaderCellDef aria-label="row actions">
+            &nbsp;
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              aria-label="expand row"
+              (click)="
+                expandedElement = expandedElement === element ? null : element;
+                $event.stopPropagation()
+              "
+            >
+              @if(expandedElement !== element) {
+              <mat-icon>keyboard_arrow_down</mat-icon>
+              } @if(expandedElement === element) {
+              <mat-icon>keyboard_arrow_up</mat-icon>
+              }
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="columnsToDisplay.length"
+          >
+            <div
+              [@detailExpand]="
+                element === expandedElement ? 'expanded' : 'collapsed'
+              "
+            >
+              <div class="p-15 rounded b-1 m-b-16 m-x-18">
+                <div class="d-flex align-items-center gap-12">
+                  <span
+                    class="bg-light-primary text-primary icon-65 rounded f-w-600 d-flex align-items-center justify-content-center"
+                  >
+                    {{ element.Number }}
+                  </span>
+                  <div>
+                    <div class="f-s-14 f-w-600 mat-subtitle-1">
+                      {{ element.Agent }}
+                    </div>
+                    
+                  </div>
+                </div>
+
+                <div class="f-s-14 m-t-8">
+                  {{ element.Content }}
+                </div>
+                <br>
+                <button
+                mat-flat-button
+                color="primary"
+                matTooltip="Info about the action"
+              >
+                Add Note
+              </button>
+              
+              <button mat-flat-button
+              color="primary"
+              (click)="togglePlay()"
+              style="margin: 10px;">
+                Play Recording
+              </button>
+              <div id="wavesurfer"></div>
+              </div>
+            </div> 
+            
+           </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+        <tr
+          mat-row
+          *matRowDef="let element; columns: columnsToDisplayWithExpand"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="
+            expandedElement = expandedElement === element ? null : element
+          "
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          class="example-detail-row"
+        ></tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

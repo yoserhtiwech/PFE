@@ -1,0 +1,89 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+<div class="row justify-content-between">
+<div class="col-lg-4">
+<mat-form-field appearance="outline" class="w-100 hide-hint">
+  <input
+    matInput
+    placeholder="Search Number"
+    
+  />
+  <mat-icon matSuffix>
+    <i-tabler name="search" class="icon-20"></i-tabler>
+  </mat-icon>
+</mat-form-field>
+</div>
+<div class="col-lg-4 d-flex align-items-center justify-content-end">
+<button mat-flat-button  color="primary">
+  Invite Number
+</button>
+</div>
+</div>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card class="cardWithShadow">
+        <mat-card-content>
+          <div class="table-responsive m-t-30">
+            <table mat-table [dataSource]="dataSource1" class="w-100">
+              <!-- Position Column -->
+              
+              <ng-container matColumnDef="Number">
+                <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
+                  Number
+                </th>
+                <td mat-cell *matCellDef="let element" class="mat-body-1">
+                  {{ element.productName }}
+                </td>
+              </ng-container>
+      
+              <!-- Name Column -->
+              <ng-container matColumnDef="Agent">
+                <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14 p-l-0">
+                  Agent
+                </th>
+                <td mat-cell *matCellDef="let element" class="p-l-0">
+                  <div class="d-flex align-items-center">
+                    <img [src]="element.imagePath" alt="users" width="40" class="rounded-circle" />
+                    <div class="m-l-16">
+                      <h6 class="mat-subtitle-1 f-s-14 f-w-600">
+                        {{ element.uname }}
+                      </h6>
+                      <span class="mat-body-1 f-s-12">
+                        {{ element.position }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+      
+              <!-- Weight Column -->
+              
+      
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
+                  Action
+                </th>
+                <td mat-cell *matCellDef="let element" class="action-link">
+                    <a
+                      
+                      class="m-r-10 cursor-pointer"
+                      ><i-tabler name="message" class="icon-18"></i-tabler></a>
+                    <a
+                      
+                      class="m-r-10 cursor-pointer"
+                    >
+                      
+                      <i-tabler name="dots" class="icon-18"></i-tabler
+                        >
+                    </a>
+                  </td>
+              </ng-container>
+      
+              <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
