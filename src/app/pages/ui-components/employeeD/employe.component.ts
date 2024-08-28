@@ -10,9 +10,13 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
 import {  OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/service/user.service';
+import { UserResponse } from 'src/app/services/models/user-response';
 import {
   FormBuilder,
   FormControl,
+  FormGroup,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -30,15 +34,7 @@ export interface productsData {
   priority: string;
 }
 const PRODUCT_DATA: productsData[] = [
-  {
-    id: 1,
-    imagePath: 'assets/images/profile/user-1.jpg',
-    uname: 'Sunil Joshi',
-    position: 'Web Designer',
-    productName: 'Elite Admin',
-    budget: 3.9,
-    priority: 'low'
-  },
+  
   {
     id: 2,
     imagePath: 'assets/images/profile/user-2.jpg',
@@ -261,7 +257,10 @@ export class ChecklistDatabase {
   providers: [ChecklistDatabase],
   styleUrls: ['./employe.component.scss'],
 })
-export class AppEmployeeComponent implements AfterViewInit {
+export class AppEmployeeComponent implements AfterViewInit,OnInit {
+
+userResponse:UserResponse[]=[];
+  
   displayedColumns1: string[] = ['assigned', 'name'];
   dataSource1 = PRODUCT_DATA;
 
@@ -287,10 +286,10 @@ export class AppEmployeeComponent implements AfterViewInit {
     'date of joining',
     'action',
   ];
-  dataSource = new MatTableDataSource(employees);
+  dataSource = new MatTableDataSource<UserResponse>();
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(private _database: ChecklistDatabase,public dialog: MatDialog, public datePipe: DatePipe) { this.treeFlattener = new MatTreeFlattener(
+  constructor(private _database: ChecklistDatabase,public dialog: MatDialog, public datePipe: DatePipe,private router: Router,private userService:UserService) { this.treeFlattener = new MatTreeFlattener(
     this.transformer,
     this.getLevel,
     this.isExpandable,
@@ -311,6 +310,15 @@ export class AppEmployeeComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  } 
+  ngOnInit(): void {
+    this.findAllUsers();
+  } 
+  private findAllUsers() {
+    this.userService.findAllUsers().subscribe({next:(users: UserResponse[])=>{this.userResponse=users;
+      this.dataSource.data=users;
+    }}
+  );
   }
 
   applyFilter(filterValue: string): void {
@@ -337,15 +345,14 @@ export class AppEmployeeComponent implements AfterViewInit {
   addRowData(row_obj: Employee): void {
     this.dataSource.data.unshift({
       id: employees.length + 1,
-      Name: row_obj.Name,
-      Position: row_obj.Position,
-      Email: row_obj.Email,
-      Number: row_obj.Number,
-
-      DateOfJoining: new Date(),
-      Salary: row_obj.Salary,
-      Projects: row_obj.Projects,
-      imagePath: row_obj.imagePath,
+      fullname: '',
+      email: '',
+      password: '',
+      poste: '',
+      roles: '',
+      numbers: 0,
+      groupe: '',
+      createdDate: new Date,
     });
     this.dialog.open(AppAddEmployeeComponent);
     this.table.renderRows();
@@ -516,6 +523,7 @@ export class AppEmployeeComponent implements AfterViewInit {
 })
 // tslint:disable-next-line: component-class-suffix
 export class AppEmployeeDialogContentComponent implements OnInit { 
+  userForm: FormGroup;
   firstControl = new FormControl('');
   firstoption: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
@@ -531,9 +539,10 @@ export class AppEmployeeDialogContentComponent implements OnInit {
     public dialogRef: MatDialogRef<AppEmployeeDialogContentComponent>,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee,
-  ) {
+  ) { 
     this.local_data = { ...data };
-    this.action = this.local_data.action;
+    this.action = this.local_data.action; 
+    console.log(this.local_data.action);
     if (this.local_data.DateOfJoining !== undefined) {
       this.joiningDate = this.datePipe.transform(
         new Date(this.local_data.DateOfJoining),

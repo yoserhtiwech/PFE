@@ -18,6 +18,7 @@ import { DialerRoutes} from './dialer.routing';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons'; 
 import { AppDialerComponent} from './dialer.component';
+import { CallPopupComponent } from './call-popup.component';
 @NgModule({
     imports: [
         RouterModule.forChild(DialerRoutes),
@@ -36,7 +37,7 @@ import { AppDialerComponent} from './dialer.component';
 
     ]
     ,exports: [TablerIconsModule],
-    declarations:[AppDialerComponent]
+    declarations:[AppDialerComponent,CallPopupComponent]
     ,providers:[DatePipe]})
     
 export class DialerModule{}

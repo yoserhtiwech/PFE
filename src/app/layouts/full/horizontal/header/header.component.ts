@@ -4,15 +4,17 @@ import {
   EventEmitter,
   Input,
 } from '@angular/core';
-import { CoreService } from 'src/app/services/core.service';
+import { CoreService } from 'src/app/services/service/core.service';
 import { MatDialog } from '@angular/material/dialog';
 import { navItems } from '../../vertical/sidebar/sidebar-data';
+//import { navItems2 } from '../sidebar/sidebar-data';
 import { TranslateService } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
 import { BrandingComponent } from '../../vertical/sidebar/branding.component';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 interface notifications {
@@ -85,7 +87,8 @@ export class AppHorizontalHeaderComponent {
   constructor(
     private vsidenav: CoreService,
     public dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {
     translate.setDefaultLang('en');
   }
@@ -101,6 +104,11 @@ export class AppHorizontalHeaderComponent {
   changeLanguage(lang: any): void {
     this.translate.use(lang.code);
     this.selectedLanguage = lang;
+  }
+  logout() {
+    // Clear the authentication tokens (this could vary depending on how you handle auth)
+    localStorage.removeItem('token'); // Example of removing a token from localStorage
+    window.location.reload();
   }
 
   notifications: notifications[] = [
@@ -144,7 +152,7 @@ export class AppHorizontalHeaderComponent {
       subtitle: 'Account Settings',
       link: '/theme-pages/account-setting',
     },
-    {
+   /*  {
       id: 2,
       img: '/assets/images/svgs/icon-inbox.svg',
       title: 'My Inbox',
@@ -157,7 +165,7 @@ export class AppHorizontalHeaderComponent {
       title: 'My Tasks',
       subtitle: 'To-do and Daily Tasks',
       link: '/apps/taskboard',
-    },
+    }, */
   ];
 
   apps: apps[] = [
@@ -282,7 +290,7 @@ export class AppHorizontalSearchDialogComponent {
   navItems = navItems;
 
   navItemsData = navItems.filter((navitem) => navitem.displayName);
-
+  
   // filtered = this.navItemsData.find((obj) => {
   //   return obj.displayName == this.searchinput;
   // });

@@ -5,7 +5,7 @@ export const ActivityRoutes: Routes=[
         path: '',
         component: AppActivityComponent,
         data: {
-          title: 'Activity',
+          title: 'Activité',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Activity' },

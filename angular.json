@@ -30,7 +30,7 @@
               "src/assets/scss/style.scss",
               "node_modules/angular-calendar/css/angular-calendar.css"
             ],
-            "scripts": []
+            "scripts": [ ]
           },
           "configurations": {
             "production": {

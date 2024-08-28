@@ -10,6 +10,11 @@ import { MaterialModule } from '../../../material.module';
 import { CommonModule } from '@angular/common';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
+import { UserResponse } from 'src/app/services/models/user-response';
+import { SmsLogsResponse } from 'src/app/services/models/SmsLogsResponse';
+import { UserService } from 'src/app/services/services';
+import { TokenService } from 'src/app/services/token/token.service';
+import{LogsService} from 'src/app/services/service/logs.service';
 
 const ELEMENT_DATA: PeriodicElement[] = [
   
@@ -96,19 +101,46 @@ export class AppExpandTableComponentSms implements OnInit {
   
   // tslint:disable-next-line - Disables all
   // messages: Object[] = messages;
-
-  
-    
-  
-  dataSource = ELEMENT_DATA;
+  user:UserResponse;
+  userGroup :number;
+  SmsLogsResponse:SmsLogsResponse[];
+  role:string[];
+  dataSource :SmsLogsResponse[];
+  //dataSource = ELEMENT_DATA;
   columnsToDisplay = ['Id', 'Number', 'Agent', 'Date', 'Cost'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: PeriodicElement | null = null;
   selected: Date | null;
   selected1: Date | null;
-  constructor() { }
+  constructor(private TokenService:TokenService,private LogsService:LogsService,private UserService:UserService) { }
 
-  ngOnInit(): void {} 
+  ngOnInit(): void {
+    this.UserService.findUserById(this.TokenService.getUserId()).subscribe((user: UserResponse) => {
+      this.user = user;
+    //  this.userGroup=user.groupe.id;
+    });
+  
+    this.role=this.TokenService.userRoles;
+    if (this.role.at(0)=='Admin'){
+      this.getAllSMSLogs();
+    }else if(this.role.at(0)=='Supervisor'){
+      this.getGroupeSmsLogs(this.userGroup);
+    }
+
+  } 
+  getAllSMSLogs() {
+   this.LogsService.findAllSmsLogs().subscribe({next:(sms:SmsLogsResponse[])=>{
+    this.SmsLogsResponse=sms;
+    this.dataSource=this.SmsLogsResponse;
+   }})
+  }
+  getGroupeSmsLogs(userGroup: number) {
+    this.LogsService.findGroupSmsLogs(userGroup).subscribe({next:(sms: SmsLogsResponse[])=>{
+      this.SmsLogsResponse=sms;
+    this.dataSource=this.SmsLogsResponse;}})
+  
+  
+  }
   openDialog(action: string, obj: any): void {
     obj.action = action;
     

@@ -1,91 +1,54 @@
 <mat-card class="mat-card-top chat-app cardWithShadow">
-  <mat-sidenav-container [ngClass]="{
-      'side-panel-opened': sidePanelOpened,
-      'side-panel-closed': !sidePanelOpened
-    }">
+  <mat-sidenav-container [ngClass]="{  'side-panel-opened': sidePanelOpened,  'side-panel-closed': !sidePanelOpened}">
     <!-- ---------------------------------------------------- -->
     <!-- sidebar -->
     <!-- ---------------------------------------------------- -->
     <mat-sidenav class="chats" #chatnav [mode]="isOver() ? 'over' : 'side'" [opened]="!isOver()" (open)="sidePanelOpened = true"
       (close)="sidePanelOpened = false">
-      <ng-scrollbar class="position-relative" style="height: 100%">
-        <div class="p-x-24"> 
-         <br>
-           <!-- dropdown -->
-           <!-- <div class="row">
-            <div class="col">
-              <button mat-button class="menu-button">
-                <span>SMS</span>
-              </button>
-            </div>
-            <div class="col">
-              <button mat-button class="menu-button">
-                <span>Notification SMS</span>
-              </button>
-            </div>
-            <div class="col">
-              <button mat-button class="menu-button">
-                <span>Conversation</span>
-              </button>
-            </div>
-          </div>
-           -->  
-           <mat-card class="cardWithShadow  "style="margin-bottom: -10px;"> 
-           <div class="row justify-content-start">
-            <button mat-icon-button class="col-sm-6 col-lg-3 offset-lg-1 " >
-             
+      <div class="p-x-24" style="position: sticky; top: 5px; z-index: 10; background: white;">
+        <!-- Message, Notification, Conversation Buttons -->
+        <mat-card class="cardWithShadow" style="margin-bottom: 0px; "> 
+          <div class="row justify-content-start">
+            <button mat-icon-button class="col-sm-6 col-lg-3 offset-lg-1" [ngClass]="{'selected': isSelected('SMS')}" (click)="updateMessages('SMS')">
               <i-tabler name="message" class="icon-18 m-r-4"></i-tabler>
             </button>
-            <button mat-icon-button class="col-sm-6 col-lg-3 ">
+            <button mat-icon-button class="col-sm-6 col-lg-3" [ngClass]="{'selected': isSelected('notifications')}" (click)="updateMessages('notifications')">
               <i-tabler name="bell" class="icon-18 m-r-4"></i-tabler>
-             </button>
-            <button mat-icon-button class="col-sm-6 col-lg-3 " >
-              <i-tabler name="messages" class="icon-18 m-r-4"></i-tabler> </button>
-            </div> 
-            </mat-card>
-          
-          <div class="d-flex align-items-center p-8"></div>
-          <!-- search -->  
-          <mat-card class="cardWithShadow"style=" height: 80px; padding: 0px">
-            <mat-card-content>
-              <div class="row justify-content-between">
-                <div class="col-sm-6 col-lg-4 ">
-                  <mat-form-field appearance="outline" class="hide-hint" style="width: 250px;">
-                    <input matInput  placeholder="Search Tickets" />
-                    <mat-icon matSuffix>
-                      <i-tabler name="search" class="icon-20"></i-tabler>
-                    </mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-sm-3 col-lg-3 offset-lg-2 d-flex align-items-center justify-content-end  ">
-                  <button mat-flat-button  color="primary " style="width: 200px;">
-                    Nouveau
-                  </button>
-                </div>
-                <div class="col-sm-3 col-lg-3 d-flex justify-content-end align-items-center ">
-                  <button mat-flat-button  color="primary" style="width: 200px;"   >
-                    Filter  
-                  </button>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-          <!-- <mat-card class="cardWithShadow  " style="width: 300px; height: 56px;">  
-            <div class="row justify-content-between">
-          <mat-form-field appearance="outline" class="w-100">
-            <input matInput placeholder="Search Contacts" />
-            <mat-icon matSuffix>
-              <i-tabler name="search" class="icon-20"></i-tabler>
-            </mat-icon> 
-          </mat-form-field>  
-          <div class="col-sm-4 d-flex justify-content-end align-items-center">
-            <button mat-flat-button  color="primary">
-              Filter
             </button>
-          </div>
-          </div>
-        </mat-card> -->
-        </div>
+            <button mat-icon-button class="col-sm-6 col-lg-3" [ngClass]="{'selected': isSelected('conversation')}" (click)="updateMessages('conversation')">
+              <i-tabler name="messages" class="icon-18 m-r-4"></i-tabler>
+            </button>
+          </div> 
+        </mat-card>
+
+        <!-- Search Bar -->
+        <mat-card class="cardWithShadow" style="height: 75px; padding: 0; margin-top: 1px;">
+          <mat-card-content style="height: 100%; display: flex; align-items: center;" >
+            <div class="row justify-content-between w-100">
+              <div class="col-sm-6 col-lg-4 ">
+                <mat-form-field appearance="outline" class="hide-hint" style="width: 250px;">
+                  <input matInput placeholder="Search Tickets" />
+                  <mat-icon matSuffix>
+                    <i-tabler name="search" class="icon-20"></i-tabler>
+                  </mat-icon>
+                </mat-form-field>
+              </div>
+              
+              <div class="col-sm-6 col-lg-4 d-flex align-items-center justify-content-end">
+                <button mat-icon-button>
+                  <i-tabler name="pencil-plus" class="icon-20"></i-tabler> 
+                </button>
+                <button mat-icon-button>
+                  <i-tabler name="filter" class="icon-20"></i-tabler> 
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+ 
+      <ng-scrollbar class="position-relative" style="height: calc(100% - 160px);">
+       
 
         <mat-nav-list class="chat-listing">
           @for(message of messages; track message.photo) {

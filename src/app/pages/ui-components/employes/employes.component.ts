@@ -10,16 +10,33 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
 import {  OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/service/user.service';
+import { UserResponse } from 'src/app/services/models/user-response';
+import { GroupeService } from 'src/app/services/service/groupe.service';
+import { RoleService } from 'src/app/services/service/role.service';
+import { NumberService } from 'src/app/services/services';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+
 import {
   FormBuilder,
   FormControl,
+  FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 import { CommonModule } from '@angular/common';
+import { GroupeResponse } from 'src/app/services/models/groupe-response';
+import { updateRequest } from 'src/app/services/models/update-Request';
+import { roleNames } from 'src/app/services/fn/role/roleNames';
+import { DialogData } from '../dialog/dialog.component';
 export interface productsData {
   id: number;
   imagePath: string;
@@ -68,7 +85,7 @@ const PRODUCT_DATA: productsData[] = [
   },
 ];
 
-export class TodoItemNode {
+/* export class TodoItemNode {
   children: TodoItemNode[];
   item: string;
 }
@@ -77,7 +94,20 @@ export class TodoItemFlatNode {
   item: string;
   level: number;
   expandable: boolean;
-}
+} */
+  export class TodoItemNode {
+    children: TodoItemNode[];
+    item: string;
+    number: number;
+  }
+  
+  export class TodoItemFlatNode {
+    item: string;
+    level: number;
+    expandable: boolean;
+    number: number;
+  }
+  
 const TREE_DATA = {
   Reminders: [
     'Cook dinner',
@@ -213,15 +243,45 @@ export class ChecklistDatabase {
   }
 
   constructor() {
-    this.initialize();
+   // this.initialize();
   }
 
-  initialize() {
+  /* initialize() {
     const data = this.buildFileTree(TREE_DATA, 0);
     this.dataChange.next(data);
-  }
-
-  buildFileTree(obj: { [key: string]: any }, level: number): TodoItemNode[] {
+  } */
+    initialize(userNumbers: { id: number; num: number }[][]) {
+      const data = this.buildFileTreeFromUsers(userNumbers, 0);
+      this.dataChange.next(data);
+    }
+    buildFileTreeFromUsers(userNumbers: { id: number; num: number }[][], level: number): TodoItemNode[] {
+      return userNumbers.map(user => {
+        const node = new TodoItemNode();
+        node.item = "number"; // Assuming each user array has at least one number object
+  
+        node.children = user.map(number => {
+          const numberNode = new TodoItemNode();
+          numberNode.item = `Number: ${number.num}`;
+          return numberNode;
+        });
+  
+        return node;
+      });
+    }
+  
+    insertItem(parent: TodoItemNode, name: string) {
+      if (parent.children) {
+        parent.children.push({ item: name } as TodoItemNode);
+        this.dataChange.next(this.data);
+      }
+    }
+  
+    updateItem(node: TodoItemNode, name: string) {
+      node.item = name;
+      this.dataChange.next(this.data);
+    }
+ 
+ /*  buildFileTree(obj: { [key: string]: any }, level: number): TodoItemNode[] {
     return Object.keys(obj).reduce<TodoItemNode[]>((accumulator, key) => {
       const value = obj[key];
       const node = new TodoItemNode();
@@ -253,7 +313,7 @@ export class ChecklistDatabase {
   updateItem(node: TodoItemNode, name: string) {
     node.item = name;
     this.dataChange.next(this.data);
-  }
+  } */
 }
 
 @Component({
@@ -261,14 +321,17 @@ export class ChecklistDatabase {
   providers: [ChecklistDatabase],
   styleUrls: ['./employes.component.scss'],
 })
-export class AppEmployesComponent implements AfterViewInit {
+export class AppEmployesComponent implements AfterViewInit,OnInit {
+  userResponse:UserResponse[]=[];
+  groupeResponse:GroupeResponse[]=[];
   displayedColumns1: string[] = ['assigned', 'name'];
-  dataSource1 = PRODUCT_DATA;
+  dataSource1 :GroupeResponse[];
+  dataSource3:UserResponse[][];
 
   firstControl = new FormControl('');
   firstoption: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
-  flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
+  /* flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
   nestedNodeMap = new Map<TodoItemNode, TodoItemFlatNode>();
   selectedParent: TodoItemFlatNode | null = null;
   newItemName = '';
@@ -277,7 +340,7 @@ export class AppEmployesComponent implements AfterViewInit {
   treeFlattener: MatTreeFlattener<TodoItemNode, TodoItemFlatNode>;
   dataSource2: MatTreeFlatDataSource<TodoItemNode, TodoItemFlatNode>;
   checklistSelection = new SelectionModel<TodoItemFlatNode>(true);
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);*/
   searchText: any;
   displayedColumns: string[] = [
     '#',
@@ -287,72 +350,107 @@ export class AppEmployesComponent implements AfterViewInit {
     'date of joining',
     'action',
   ];
-  dataSource = new MatTableDataSource(employees);
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+   
+  dataSource = new MatTableDataSource<UserResponse>();
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+  grouprname: any;
 
-  constructor(private _database: ChecklistDatabase,public dialog: MatDialog, public datePipe: DatePipe) { this.treeFlattener = new MatTreeFlattener(
+  constructor(private _database: ChecklistDatabase,public dialog: MatDialog, public datePipe: DatePipe ,private router: Router,private userService:UserService,private groupeService:GroupeService ,private RoleService:RoleService,private NumberService:NumberService) { 
+   /*  this.treeFlattener = new MatTreeFlattener(
     this.transformer,
     this.getLevel,
     this.isExpandable,
-    this.getChildren
-  );
-  this.treeControl = new FlatTreeControl<TodoItemFlatNode>(
-    this.getLevel,
-    this.isExpandable
-  );
-  this.dataSource2 = new MatTreeFlatDataSource(
+    this.getChildren 
+  );*/
+  
+ /*  this.dataSource2 = new MatTreeFlatDataSource(
     this.treeControl,
     this.treeFlattener
   );
 
   _database.dataChange.subscribe((data) => {
     this.dataSource2.data = data;
-  }); }
-
+  }); } */
+  }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  } 
+  openInjectDialog(groupName: string) {
+   const dialogRef=  this.dialog.open(AppDialogDataComponent, {
+      data: { groupName: groupName },
+      
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.data) {
+        console.log(result.data)
+        this.groupeService.updategroup(groupName,result.data).subscribe((result2)=>{
+          if(result2){}
+        console.log(result2);
+        })}})
   }
+  ngOnInit(): void {
+    
+    this.findAllUsers();
+    this.findAllMembres();
+  } 
+  private findAllUsers() {
+    this.userService.findAllUsers().subscribe({next:(users: UserResponse[])=>{this.userResponse=users;
+      this.dataSource.data=users;
+      //const userNumbers = users.map(user => user.Number);
+      //this._database.initialize(userNumbers);
+    
 
+    }}
+  );
+  }  
+  private findAllMembres(){
+    this.groupeService.findAllMembers().subscribe({next:(members: GroupeResponse[])=>{this.groupeResponse=members; 
+      this.dataSource1=members; 
+      
+      this.dataSource3=members.map(users=> users.users);
+      console.log(this.dataSource3);
+    }})
+  } 
+  
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   openDialog(action: string, obj: any): void {
-    obj.action = action;
+    obj.action = action; 
+    console.log(action)
     const dialogRef = this.dialog.open(AppEmployesDialogContentComponent, {
       data: obj,
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.addRowData(result.data);
-      } else if (result.event === 'Update') {
+        this.userService.AddUser(result.data).subscribe((result)=>{
+          if(result){
+          this.dialog.open(AppAddEmployesComponent);}
+        })
+      } /* else if (result.event === 'Update') {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data);
-      }
+      } */
     });
   }
 
   // tslint:disable-next-line - Disables all
   addRowData(row_obj: Employee): void {
-    this.dataSource.data.unshift({
+    /* this.dataSource.data.unshift({
       id: employees.length + 1,
-      Name: row_obj.Name,
-      Position: row_obj.Position,
+      fullname: row_obj.Name,
       Email: row_obj.Email,
-      Number: row_obj.Number,
-
-      DateOfJoining: new Date(),
-      Salary: row_obj.Salary,
-      Projects: row_obj.Projects,
-      imagePath: row_obj.imagePath,
-    });
+      groupe: undefined,
+      Number: undefined 
+    });*/
     this.dialog.open(AppAddEmployesComponent);
-    this.table.renderRows();
+    //this.table.renderRows();
   }
 
   // tslint:disable-next-line - Disables all
-  updateRowData(row_obj: Employee): boolean | any {
+ /* updateRowData(row_obj: Employee): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       if (value.id === row_obj.id) {
         value.Name = row_obj.Name;
@@ -426,16 +524,16 @@ export class AppEmployesComponent implements AfterViewInit {
     this.checklistSelection.toggle(node);
     this.checkAllParentsSelection(node);
   }
-
-  checkAllParentsSelection(node: TodoItemFlatNode): void {
+*/
+ /*  checkAllParentsSelection(node: TodoItemFlatNode): void {
     let parent: TodoItemFlatNode | null = this.getParentNode(node);
     while (parent) {
       this.checkRootNodeSelection(parent);
       parent = this.getParentNode(parent);
     }
-  }
+  } */
 
-  checkRootNodeSelection(node: TodoItemFlatNode): void {
+  /* checkRootNodeSelection(node: TodoItemFlatNode): void {
     const nodeSelected = this.checklistSelection.isSelected(node);
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected =
@@ -505,9 +603,36 @@ export class AppEmployesComponent implements AfterViewInit {
         title: 'Charles Nunez',
         subtext: 'Nepal',
       },
-    ];
+    ]; */
 }
+@Component({
+  selector: 'dialog-data-example-dialog',
+  providers: [ChecklistDatabase, FormsModule, ReactiveFormsModule, CommonModule],
+  templateUrl: 'dialog-data.component.html',
+})
+export class AppDialogDataComponent {
+  groupName: any;
+  data1: any;
+  groupName1: any;
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { groupName: string } ,private fb: FormBuilder,
+  public datePipe: DatePipe,public dialogRef: MatDialogRef<AppDialogDataComponent>,) {
+this.data1=data;
+this.groupName1=this.data1.groupName;
+this.groupName=this.data1.groupName;
 
+
+}
+doAction(){
+  console.log(this.groupName)
+  console.log(this.groupName1)
+  if (this.groupName!=this.groupName1) { 
+    this.dialogRef.close({  data: this.groupName});
+    
+  }else{this.dialogRef.close}
+}}
+
+
+ 
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'app-dialog-content',
@@ -516,37 +641,61 @@ export class AppEmployesComponent implements AfterViewInit {
 })
 // tslint:disable-next-line: component-class-suffix
 export class AppEmployesDialogContentComponent implements OnInit { 
+  userForm: FormGroup;
   firstControl = new FormControl('');
-  firstoption: string[] = ['One', 'Two', 'Three'];
+  firstoption: string[] ;
   filteredOptions: Observable<string[]>;
 
   action: string;
   // tslint:disable-next-line - Disables all
-  local_data: any;
+  
   selectedImage: any = '';
   joiningDate: any = '';
+  local_data: any;
+updateUser:updateRequest = { email: '', group: '', num: 0, role: '' };
 
-  constructor(
+  constructor(private groupeService:GroupeService ,private RoleService:RoleService,private NumberService:NumberService,
+    private fb: FormBuilder,
     public datePipe: DatePipe,
     public dialogRef: MatDialogRef<AppEmployesDialogContentComponent>,
     // @Optional() is used to prevent error if no data is passed
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee,
-  ) {
-    this.local_data = { ...data };
+    @Optional() @Inject(MAT_DIALOG_DATA) public data : updateRequest,
+  ) { 
+    this.local_data={...data};
     this.action = this.local_data.action;
-    if (this.local_data.DateOfJoining !== undefined) {
-      this.joiningDate = this.datePipe.transform(
-        new Date(this.local_data.DateOfJoining),
-        'yyyy-MM-dd',
-      );
-    }
-    if (this.local_data.imagePath === undefined) {
-      this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
-    }
+    this.userForm = this.fb.group({
+      group: [this.local_data.group|| '', Validators.required],
+      email: [this.local_data.email || '', [Validators.required, Validators.email]],
+      number: [this.local_data.number ||'', Validators.required],
+      role:[this.local_data.role ||'', Validators.required]
+    });
+   
+    
   }
+  private getRoleNames(): Observable<string[]> {
+    return this.RoleService.roleNames();
+}
 
+  private getGroupeNames():Observable<string[]>{
+    return this.groupeService.findGroupName();
+  }
+  private getNumberAvailable():number[]{
+    let numbers: number[] = [];
+    this.NumberService.findAvailableNumbers().subscribe({
+        next: (response: any) => {
+            // Assuming response contains an array of objects and each object has a 'num' property
+            numbers = response.map((item: any) => item.num);
+        }
+    });
+    return numbers;
+  }
   doAction(): void {
-    this.dialogRef.close({ event: this.action, data: this.local_data });
+    console.log(this.userForm.get('email')?.value)
+     this.updateUser.email=this.userForm.get('email')?.value;
+   this.updateUser.group=this.userForm.get('group')?.value;
+    this.updateUser.num=this.userForm.get('number')?.value;
+   this.updateUser.role=this.userForm.get('role')?.value;
+   this.dialogRef.close({ event: this.action, data: this.updateUser});
   }
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
@@ -573,11 +722,24 @@ export class AppEmployesDialogContentComponent implements OnInit {
     
   } 
   ngOnInit() {
+    this.getRoleNames().subscribe({
+      next: (names: string[]) => {
+          this.firstoption = names;
+          this.filteredOptions = this.firstControl.valueChanges.pipe(
+            startWith(''),
+            map((value) => this._filter(value || ''))
+          )
+          console.log(roleNames);
+      },
+      error: (err) => {
+          console.error('Error fetching role names:', err);
+      }
+  });
     // first option
-    this.filteredOptions = this.firstControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value || ''))
-    );}
+    ;}
+
+
+
     private _filter(value: string): string[] {
       const filterValue = value.toLowerCase();
   
@@ -585,24 +747,9 @@ export class AppEmployesDialogContentComponent implements OnInit {
         option.toLowerCase().includes(filterValue)
       );
     }
-    followercards: followercards[] = [
-    {
-      id: 1,
-      imgSrc: '/assets/images/profile/user-1.jpg',
-      title: 'Andrew Grant',
-      subtext: 'El Salvador',
-    },
-    {
-      id: 2,
-      imgSrc: '/assets/images/profile/user-2.jpg',
-      title: 'Leo Pratt',
-      subtext: 'Bulgaria',
-    },
-    {
-      id: 3,
-      imgSrc: '/assets/images/profile/user-3.jpg',
-      title: 'Charles Nunez',
-      subtext: 'Nepal',
-    },
-  ];
+   
 }
+function doAction() {
+  throw new Error('Function not implemented.');
+}
+

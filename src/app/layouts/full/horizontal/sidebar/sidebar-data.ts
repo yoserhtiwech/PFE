@@ -5,23 +5,23 @@ export const navItems: NavItem[] = [
     navCap: 'Home',
   },
   {
-    displayName: 'Activity',
+    displayName: 'Activité',
     iconName: 'activity',
     route: 'activity',},
   {
-    displayName: 'statistics',
+    displayName: 'Statistiques',
     iconName: 'chart-infographic',
     route: 'statistics',
     children: [
       {
-        displayName: 'Analytical',
+        displayName: 'Statistiques d\'Appels',
         iconName: 'point',
-        route: 'statistics/dashboard1',
+        route: 'statistics/calls',
       },
       {
-        displayName: 'eCommerce',
+        displayName: 'Statistiques ds SMS',
         iconName: 'point',
-        route: 'statistics/dashboard2',
+        route: 'statistics/sms',
       },
     ],
   },
@@ -118,7 +118,7 @@ export const navItems: NavItem[] = [
     ddType: '',
     children: [
       {
-        displayName: 'Number',
+        displayName: 'Numéros',
         iconName: 'point',
         route: 'configuration/number',
       },
@@ -128,11 +128,11 @@ export const navItems: NavItem[] = [
         route: 'configuration/role',
       },
       {
-        displayName: 'Employes',
+        displayName: 'Utilisateurs',
         iconName: 'point',
         route: 'configuration/employes',
       },
-      {
+       {
         displayName: 'Badge',
         iconName: 'point',
         route: 'configuration/badge',
@@ -216,10 +216,13 @@ export const navItems: NavItem[] = [
         displayName: 'Tooltips',
         iconName: 'point',
         route: 'configuration/tooltips',
-      },
+      }, 
     ],
   },
-  {
+  {displayName: 'Facturation',
+    iconName: 'moneybag',
+    route: 'invoice',},
+   {
     displayName: 'Pages',
     iconName: 'clipboard',
     route: '',
@@ -541,7 +544,6 @@ export const navItems: NavItem[] = [
       },
     ],
   },
-  {displayName: 'Invoice',
-  iconName: 'moneybag',
-  route: 'invoice',}
+  
 ];
+

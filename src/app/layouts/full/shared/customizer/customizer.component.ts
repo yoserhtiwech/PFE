@@ -5,7 +5,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { AppSettings } from 'src/app/app.config';
-import { CoreService } from 'src/app/services/core.service';
+import { CoreService } from 'src/app/services/service/core.service';
 import { BrandingComponent } from '../../vertical/sidebar/branding.component';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';

@@ -1,43 +1,59 @@
 <mat-card class="cardWithShadow " style=" height: 500px; width: 320px; " > 
   <mat-card-content>
     <div class="d-flex justify-content-center align-items mb-4">
+      <form [formGroup]="Form">
       <mat-form-field appearance="outline" class="hide-hint" style="width: 260px;">
           <div class="d-flex align-items-center">  
-              <input matInput placeholder="Enter Name or Phone Number" style="flex: 1;" />  
+              <input matInput [(ngModel)]="searchQuery"  placeholder="Enter Name or Phone Number" style="flex: 1;"  formControlName="userGroup"
+              required
+              [matAutocomplete]="autoGroup" />  
+              <mat-autocomplete #autoGroup="matAutocomplete">
+                @for(group of userGroupOptions | async; track group) {
+                  <mat-optgroup [label]="group.letter">
+                    @for(name of group.users; track name) {
+                    <mat-option [value]="name.fullname">
+                      {{ name.fullname }}
+                    </mat-option>
+                    }
+                  </mat-optgroup>
+                  }
+              </mat-autocomplete>
               <img src="/assets/images/chat/logoFlag.svg" alt="Conversation" style="width: 20px; height: 20px; margin-left: 10px;" />  
           </div>
       </mat-form-field>
+    </form>
   
   </div>
-    <div> 
-    <div class="key" onclick="appendToDisplay('1')"><span></span>1</div>
-    <div class="key" onclick="appendToDisplay('2')"><span>ABC</span>2</div>
-    <div class="key" onclick="appendToDisplay('3')"><span>DEF</span>3</div>
+    <div>  
+    <div class="key" (click)="appendToDisplay('1')"><span></span>1</div>
+    <div class="key" (click)="appendToDisplay('2')"><span>ABC</span>2</div>
+    <div class="key" (click)="appendToDisplay('3')"><span>DEF</span>3</div>
     <br>
-    <div class="key" onclick="appendToDisplay('4')"><span>GHI</span>4</div>
-    <div class="key" onclick="appendToDisplay('5')"><span>JKL</span>5</div>
-    <div class="key" onclick="appendToDisplay('6')"><span>MNO</span>6</div>
+    <div class="key" (click)="appendToDisplay('4')"><span>GHI</span>4</div>
+    <div class="key" (click)="appendToDisplay('5')"><span>JKL</span>5</div>
+    <div class="key" (click)="appendToDisplay('6')"><span>MNO</span>6</div>
     <br>
-    <div class="key" onclick="appendToDisplay('7')"><span>PQRS</span>7</div>
-    <div class="key" onclick="appendToDisplay('8')"><span>TUV</span>8</div>
-    <div class="key" onclick="appendToDisplay('9')"><span>WXYZ</span>9</div>
+    <div class="key" (click)="appendToDisplay('7')"><span>PQRS</span>7</div>
+    <div class="key" (click)="appendToDisplay('8')"><span>TUV</span>8</div>
+    <div class="key" (click)="appendToDisplay('9')"><span>WXYZ</span>9</div>
     <br>
-    <div class="key" onclick="appendToDisplay('0')"><span></span>0</div>
-    <div class="key" onclick="appendToDisplay('*')"><span></span>*</div>
-    <div class="key" onclick="appendToDisplay('#')"><span></span>#</div>
+    <div class="key" (click)="appendToDisplay('0')"><span></span>0</div>
+    <div class="key" (click)="appendToDisplay('*')"><span></span>*</div>
+    <div class="key" (click)="appendToDisplay('#')"><span></span>#</div>
     <br>
     <button mat-icon-button class="col-sm-6 col-lg-3  " style="margin-left: 30px;" >
       <img src="assets\images\courses\logomicro.svg" alt="Conversation "  /> 
     </button> 
-    <button mat-icon-button class="col-sm-6 col-lg-3 " style=" width: 60px; height: 60px;margin-left: 22px; margin-right: 22px;" >
-      <img  src="assets\images\courses\logophone (1).svg" alt="Conversation " style="height: 100%; width: 100%;"   /> 
-    </button> 
+    <button  mat-icon-button class="col-sm-6 col-lg-3 " (click)="initiateCall() "  style=" width: 60px; height: 60px;margin-left: 22px; margin-right: 22px;" >
+   <img  src="assets\images\courses\logophone (1).svg" alt="Conversation " style="height: 100%; width: 100%;"   /> 
+ 
+</button> 
     <button mat-icon-button class="col-sm-6 col-lg-3 " style="margin-right: 30px;  ">
       <img  src="assets\images\courses\logosnooze.svg" alt="Conversation " /> 
     </button>  
     <div class="d-flex justify-content-center align-items-center mb-4">
       <button mat-flat-button color="primary" style="display: flex; align-items: center; margin-top: 20px; ">
-         <span >  12 34 56 78 91 0</span>
+         <span >{{ userPhoneNumber }}</span>
  
       </button>
   </div>

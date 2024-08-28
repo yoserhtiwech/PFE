@@ -1,0 +1,27 @@
+<mat-card class="cardWithShadow" style="width: 1000px;">
+    <mat-card-header class="d-flex">
+      <div class="m-r-auto">
+        <mat-card-title>Heatmap</mat-card-title>
+        
+      </div>
+     <!--  <mat-form-field class="theme-select" appearance="outline">
+        <mat-select value="mar">
+          @for(month of months; track month.viewValue) {
+          <mat-option [value]="month.value">
+            {{ month.viewValue }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field> -->
+    </mat-card-header>
+    <mat-card-content> 
+        <div id="chart">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [title]="chartOptions.title"
+      [colors]="chartOptions.colors"
+    ></apx-chart>
+  </div> 
+</mat-card-content> 

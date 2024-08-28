@@ -99,10 +99,10 @@
           </div>
         </div>
       </mat-menu> -->
-      <a mat-button [routerLink]="['/chat']">Chat</a>
-      <a mat-button [routerLink]="['/network']">Network</a>
+      <a mat-button [routerLink]="['/chat']">Message</a>
+      <a mat-button [routerLink]="['/network']">Votre Réseau</a>
       <a mat-button [routerLink]="['/journal']">Journal</a>
-      <a mat-button [routerLink]="['/dialer']">Dialer</a>
+      <a mat-button [routerLink]="['/dialer']">Téléphone</a>
     </div>
 
     <span class="flex-1-auto"></span>
@@ -208,7 +208,7 @@
       class="topbar-dd cardWithShadow"
     >
       <div class="p-x-32 p-y-16">
-        <h6 class="f-s-16 f-w-600 m-0 mat-subtitle-1">User Profile</h6>
+       <h6 class="f-s-16 f-w-600 m-0 mat-subtitle-1">User Profile</h6>
 
         <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
           <img
@@ -230,7 +230,7 @@
         @for(profile of profiledd; track profile.title) {
         <a
           class="p-y-16 text-decoration-none d-block text-hover-primary"
-          [routerLink]="[profile.link]"
+          [routerLink]="['/account-setting']"
         >
           <div class="d-flex align-items-center">
             <button
@@ -258,10 +258,10 @@
 
       <div class="p-y-12 p-x-32">
         <a
-          [routerLink]="['/authentication/side-login']"
           mat-stroked-button
           color="primary"
           class="w-100"
+          (click)="logout()"
           >Logout</a
         >
       </div>

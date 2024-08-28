@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CoreService } from 'src/app/services/core.service';
+import { CoreService } from 'src/app/services/service/core.service';
 import { AppSettings } from 'src/app/app.config';
 
 @Component({

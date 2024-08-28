@@ -4,7 +4,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MaterialModule } from '../../../material.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'; 
+import { NumberService } from 'src/app/services/services';
+import { numberResponse } from 'src/app/services/models/number-response';
 
 export interface productsData {
   id: number;
@@ -59,8 +61,21 @@ const PRODUCT_DATA: productsData[] = [
   templateUrl: './number.component.html',
 })
 export class AppNumberComponent  implements OnInit{
+  numberResponse:numberResponse[]
   displayedColumns1: string[] = ['Number', 'Agent', 'Action'];
-  dataSource1 = PRODUCT_DATA;
-  ngOnInit(): void {}
+  dataSource1 : numberResponse[];
+  constructor(private numberService:NumberService){}
+  ngOnInit(): void {
+    this.findAllNumbers();
+  }
+  private findAllNumbers() {
+    this.numberService.findAllNumbers().subscribe({next:(numbers: numberResponse[])=>{
+      this.numberResponse=numbers;
+
+       this.dataSource1=this.numberResponse;
+
+    }}
+  );
+  }  
  
 }

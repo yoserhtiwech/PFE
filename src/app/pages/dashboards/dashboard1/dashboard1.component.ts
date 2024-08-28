@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgApexchartsModule } from "ng-apexcharts";
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+
+
 
 // components
 import { AppTopCardsComponent } from '../../../components/dashboard1/top-cards/top-cards.component';
@@ -14,7 +19,7 @@ import { AppSellingProductComponent } from '../../../components/dashboard1/selli
 import { AppWeeklyStatsComponent } from '../../../components/dashboard1/weekly-stats/weekly-stats.component';
 import { AppTopProjectsComponent } from '../../../components/dashboard1/top-projects/top-projects.component';
 import { AppProjectsComponent } from '../../../components/dashboard1/projects/projects.component';
-
+import { heatmapComponent } from 'src/app/components/dashboard1/heatmap/heatmap.component';
 @Component({
   selector: 'app-dashboard1',
   standalone: true,
@@ -31,7 +36,8 @@ import { AppProjectsComponent } from '../../../components/dashboard1/projects/pr
     AppSellingProductComponent,
     AppWeeklyStatsComponent,
     AppTopProjectsComponent,
-    AppProjectsComponent
+    AppProjectsComponent,
+    heatmapComponent
   ],
   templateUrl: './dashboard1.component.html',
 })

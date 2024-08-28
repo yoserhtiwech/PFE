@@ -20,7 +20,8 @@ import { AppToolbarComponent } from './toolbar/toolbar.component';
 import { AppTooltipsComponent } from './tooltips/tooltips.component';
 import{AppNumberComponent} from './number/number.component'
 import{AppEmployesComponent} from './employes/employes.component'
-import { AppRoleComponent } from './Role/role.component';
+import { AppRoleComponent } from './Role/role.component'; 
+import {authGuard} from '../../services/guard/auth.guard';
 
 export const UiComponentsRoutes: Routes = [
   {
@@ -216,28 +217,31 @@ export const UiComponentsRoutes: Routes = [
       {
         path: 'number',
         component: AppNumberComponent,
+        
         data: {
-          title: 'Number',
+          title: 'Numéros',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Number' },
+            { title: 'Numéros' },
           ],
         },
       },
       {
         path: 'employes',
         component: AppEmployesComponent,
+        
         data: {
-          title: 'Employes',
+          title: 'Utilisateurs',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Employes' },
+            { title: 'Utilisateurs' },
           ],
         },
       },
       {
         path: 'role',
         component: AppRoleComponent,
+        
         data: {
           title: 'Roles',
           urls: [

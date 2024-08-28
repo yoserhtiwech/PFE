@@ -2,7 +2,7 @@
 
 @if(action !== 'Delete') {
 <mat-dialog-content style="max-width: 600px">
-  <form #userForm="ngForm">
+  <form [formGroup]="userForm">
     <div class="d-flex align-items-center m-b-16">
       <img
         class="mat-card-avatar"
@@ -15,29 +15,29 @@
       </button>
     </div>
     <div class="row">
-     <!--  <div class="col-lg-6">
-        <mat-form-field appearance="outline" class="w-100">
-          <input
-            type="text"
-            matInput
-            required
-            id="name"
-            name="name"
-            [(ngModel)]="local_data.Name"
-            placeholder="Name"
-          />
-        </mat-form-field>
-      </div> -->
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="text"
             matInput
             required
-            id="position"
-            name="position"
-            [(ngModel)]="local_data.Position"
-            placeholder="Position"
+            id="role"
+            name="role"
+            formControlName="role"
+            placeholder="Role"
+          />
+        </mat-form-field>
+      </div> 
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="Group"
+            name="Group"
+            formControlName="group"
+            placeholder="Group"
           />
         </mat-form-field>
       </div>
@@ -49,7 +49,7 @@
             required
             id="email"
             name="email"
-            [(ngModel)]="local_data.Email"
+            formControlName="email"
             placeholder="Email"
           />
         </mat-form-field>
@@ -62,6 +62,7 @@
               type="text"
               placeholder="Pick one"
               aria-label="Number"
+              formControlName="num"
               matInput
               [formControl]="firstControl"
               [matAutocomplete]="auto"

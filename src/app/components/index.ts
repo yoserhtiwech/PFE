@@ -10,7 +10,7 @@
 // export * from './dashboard1/top-projects/top-projects.component';
 // export * from './dashboard1/weekly-stats/weekly-stats.component';
 // export * from './dashboard1/yearly-breakup/yearly-breakup.component';
-
+// export * from './dashboard1/heatmap/heatmap.component'
 // dashboard 2
 // export * from './dashboard2/monthly-earnings/monthly-earnings.component';
 // export * from './dashboard2/payment-gateways/payment-gateways.component';
@@ -24,3 +24,4 @@
 // export * from './dashboard2/total-earnings/total-earnings.component';
 // export * from './dashboard2/welcome-card/welcome-card.component';
 // export * from './dashboard2/yearly-sales/yearly-sales.component'
+

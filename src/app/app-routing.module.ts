@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
-
+import {authGuard} from '../app/services/guard/auth.guard';
+import {roleGuard} from'../app/services/guard/role.guard';
 const routes: Routes = [
   {
     path: '',
@@ -10,7 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/statistics/dashboard1',
+        redirectTo: '/authentication/boxed-login',
         pathMatch: 'full',
       },
       {
@@ -24,6 +25,10 @@ const routes: Routes = [
           import('./pages/dashboards/dashboards.module').then(
             (m) => m.DashboardsModule
           ),
+          canActivate: [authGuard,roleGuard],
+          data:{
+            expectedRoles:['Admin','Supervisor']
+          }
       },
       {
         path: 'configuration',
@@ -31,6 +36,10 @@ const routes: Routes = [
           import('./pages/ui-components/ui-components.module').then(
             (m) => m.UicomponentsModule
           ),
+          canActivate: [authGuard,roleGuard],
+          data:{
+            expectedRoles:['Admin']
+          }
       },
       {
         path: 'forms',
@@ -46,6 +55,10 @@ const routes: Routes = [
         path: 'logs',
         loadChildren: () =>
           import('./pages/apps/apps.module').then((m) => m.AppsModule),
+        canActivate: [authGuard,roleGuard],
+          data:{
+            expectedRoles:['Admin','Supervisor']
+          }
       },
       {
         path: 'widgets',
@@ -70,18 +83,33 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'account-setting',
+        loadChildren: () =>
+          import('./pages/account-setting/account.module').then(
+            (m) => m.AccountSettingModule
+          ),canActivate: [authGuard]
+      },
+      {
         path: 'invoice',
         loadChildren: () =>
           import('./pages/invoice/invoice.module').then(
             (m) => m.InvoiceModule
           ),
-      },
+          canActivate: [authGuard,roleGuard],
+          data:{
+            expectedRoles:['Admin']
+          }
+      }, 
       {
         path: 'activity',
         loadChildren: () =>
           import('./pages/activity/activity.module').then(
             (m) => m.ActivityModule
           ),
+          canActivate: [authGuard,roleGuard],
+          data:{
+            expectedRoles:['Admin','Supervisor']
+          }
       },
       {
         path: 'chat',
@@ -89,6 +117,7 @@ const routes: Routes = [
           import('./pages/chat/chat.module').then(
             (m) => m.ChatModule
           ),
+          canActivate: [authGuard]
       },
       {
         path: 'journal',
@@ -96,6 +125,7 @@ const routes: Routes = [
           import('./pages/journal/journal.module').then(
             (m) => m.journalModule
           ),
+          canActivate: [authGuard]
       },
       {
         path: 'dialer',
@@ -103,6 +133,7 @@ const routes: Routes = [
           import('./pages/dialer/dialer.module').then(
             (m) => m.DialerModule
           ),
+          canActivate: [authGuard]
       },
       {
         path: 'network',
@@ -110,6 +141,7 @@ const routes: Routes = [
           import('./pages/Network/network.module').then(
             (m) => m.NetworkModule
           ),
+          canActivate: [authGuard]
       },
       
     ],
@@ -134,10 +166,10 @@ const routes: Routes = [
       },
     ],
   },
-  {
+  /* {
     path: '**',
     redirectTo: 'authentication/error',
-  },
+  }, */
 ];
 
 @NgModule({

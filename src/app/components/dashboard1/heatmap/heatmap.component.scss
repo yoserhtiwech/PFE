@@ -1,0 +1,16 @@
+/* #chart {
+    max-width: 1000px;
+   // margin: 35px auto;
+  }
+   */
+   .cardWithShadow {
+    .mat-card-content {
+      padding: 0; /* Remove padding if necessary */
+    }
+  
+    #chart {
+      width: 100% !important; /* Ensure the chart takes up full width */
+      height: 400px; /* Adjust height as needed */
+    }
+  }
+  

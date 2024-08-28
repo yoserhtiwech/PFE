@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CoreService } from 'src/app/services/core.service';
+import { CoreService } from 'src/app/services/service/core.service';
 import { MaterialModule } from '../../../material.module';
 
 @Component({

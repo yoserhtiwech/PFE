@@ -6,6 +6,11 @@ import {
 } from '@angular/material/dialog';
 import { Contact } from './network';
 import { ContactService } from './network.service';
+import { UserService } from 'src/app/services/services';
+import { GroupeService } from 'src/app/services/services';
+import { UserResponse } from 'src/app/services/models/user-response';
+import { TokenService } from 'src/app/services/token/token.service';
+import { GroupeResponse } from 'src/app/services/models/groupe-response';
 
 export interface ContactData {
   closeResult: string;
@@ -25,7 +30,7 @@ export interface ContactData {
 })
 export class AppNetworkComponent implements OnInit {
   closeResult = '';
-  contacts: Contact[] = [];
+  contacts: UserResponse[] = [];
 
   searchText: any;
   txtContactname = '';
@@ -35,15 +40,25 @@ export class AppNetworkComponent implements OnInit {
   txtContactinstagram = '';
   txtContactlinkedin = '';
   txtContactfacebook = '';
+  user: UserResponse;
+  userGroup: string;
+  dataSource: any;
+  members: UserResponse[];
+  members2:UserResponse[]
+  contacts1: UserResponse[];
+  displayContacts: boolean = true;
 
   constructor(
     public dialog: MatDialog,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private UserService :UserService ,
+    private GroupeService:GroupeService,
+    private TokenService:TokenService
   ) {
-    this.contacts = this.contactService.getContacts();
-    //console.log(this.contacts);
+   // this.contacts = this.contactService.getContacts();
+    //this.contacts1 = this.contactService.getContacts();
+    
   }
-
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppNetworkDialogContentComponent, {
@@ -62,21 +77,33 @@ export class AppNetworkComponent implements OnInit {
     this.contacts = this.filter(filterValue);
   }
 
-  filter(v: string): Contact[] {
-    return this.contactService
-      .getContacts()
+  filter(v: string): UserResponse[] {
+    const contact2=[...this.contacts1];
+    return contact2
       .filter(
-        (x) => x.contactname.toLowerCase().indexOf(v.toLowerCase()) !== -1
+        (x) => x.fullname.toLowerCase().indexOf(v.toLowerCase()) !== -1
       );
   }
 
   ngOnInit(): void {
-    // this.contacts = [];
+   this.getEquipe()
+   
+   
   }
+  getEquipe(){
+    this.displayContacts = false;
+    this.UserService.findUsergroupMember().subscribe((response:UserResponse[])=>{this.contacts=response,this.contacts1=response
+      console.log(this.members)})
+  }
+  getContact() {
+    this.displayContacts = true;
+   this.contacts=[];
+   }
+
 
   // tslint:disable-next-line - Disables all
   addContact(row_obj: ContactData): void {
-    this.contacts.unshift({
+   /*  this.contacts.unshift({
       contactimg: 'assets/images/profile/user-1.jpg',
       contactname: row_obj.txtContactname,
       contactpost: row_obj.txtContactPost,
@@ -85,7 +112,7 @@ export class AppNetworkComponent implements OnInit {
       contactinstagram: row_obj.txtContactinstagram,
       contactlinkedin: row_obj.txtContactlinkedin,
       contactfacebook: row_obj.txtContactfacebook,
-    });
+    }); */
   }
 }
 
@@ -118,3 +145,7 @@ export class AppNetworkDialogContentComponent {
     this.dialogRef.close({ event: 'Cancel' });
   }
 }
+function getContact(): ((error: any) => void) | null | undefined {
+  throw new Error('Function not implemented.');
+}
+

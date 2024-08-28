@@ -1,10 +1,14 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-
+import { HTTP_INTERCEPTORS,HttpClientModule, HttpClient } from '@angular/common/http';
+import {HttpTokenInterceptor} from './services/interceptor/http-token.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+
+import { NgApexchartsModule } from "ng-apexcharts";
+
 
 // icons
 import { TablerIconsModule } from 'angular-tabler-icons';
@@ -24,6 +28,9 @@ import { FilterPipe } from './pipe/filter.pipe';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TokenService } from './services/token/token.service';
+import { WebSocketService } from './services/service/WebSocket.service';
+import { initializeApp } from './services/fn/websocket/initializeApp';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -31,7 +38,7 @@ export function HttpLoaderFactory(http: HttpClient): any {
 
 @NgModule({
   declarations: [AppComponent, BlankComponent, FilterPipe],
-  imports: [ 
+  imports: [ NgApexchartsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -50,7 +57,25 @@ export function HttpLoaderFactory(http: HttpClient): any {
     NgScrollbarModule,
     FullComponent,
   ],
+  providers: [
+    HttpClient,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpTokenInterceptor,
+      multi: true
+    },
+    WebSocketService,
+    TokenService, {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [WebSocketService, TokenService],
+      multi: true
+    }
+
+  ],
   exports: [TablerIconsModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], 
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+  

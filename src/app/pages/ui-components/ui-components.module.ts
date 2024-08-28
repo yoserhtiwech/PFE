@@ -29,7 +29,7 @@ import { AppChipsComponent } from './chips/chips.component';
 import {
   AppDialogComponent,
   AppDialogContentComponent,
-  AppDialogDataComponent,
+ // AppDialogDataComponent,
   AppDialogMenuComponent,
   AppDialogOverviewComponent,
 } from './dialog/dialog.component';
@@ -48,6 +48,7 @@ import { AppToolbarComponent } from './toolbar/toolbar.component';
 import { AppTooltipsComponent } from './tooltips/tooltips.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AppEmployesDialogContentComponent } from './employes/employes.component';
+import { AppDialogDataComponent } from './employes/employes.component';
 import { AppAddEmployesComponent } from './employes/add/add.component';
 import { AppEmployesComponent } from './employes/employes.component';
 import { AppRoleComponent } from './Role/role.component';

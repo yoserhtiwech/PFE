@@ -39,7 +39,7 @@ export class AppBreadcrumbComponent {
       // tslint:disable-next-line - Disables all
       .subscribe((event) => {
         // tslint:disable-next-line - Disables all
-        this.titleService.setTitle(event['title'] + ' - Angular 17');
+        this.titleService.setTitle('Ringo -'+ event['title'] );
         this.pageInfo = event;
       });
   } 

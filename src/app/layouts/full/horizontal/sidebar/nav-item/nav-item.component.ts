@@ -4,7 +4,7 @@ import {
   Input,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavService } from '../../../../../services/nav.service';
+import { NavService } from '../../../../../services/service/nav.service';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';

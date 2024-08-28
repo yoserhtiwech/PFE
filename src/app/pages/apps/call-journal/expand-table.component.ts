@@ -1,6 +1,7 @@
 import { Component, OnInit ,AfterViewInit, ViewChild} from '@angular/core';
 import {
   animate,
+  group,
   state,
   style,
   transition,
@@ -28,8 +29,13 @@ import {
   ApexFill,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-
-
+import { TokenService } from 'src/app/services/token/token.service';
+import{LogsService} from 'src/app/services/service/logs.service';
+import { CallLogsResponse } from 'src/app/services/models/CallLogsResponse';
+import { UserService } from 'src/app/services/services';
+import { GroupeResponse } from 'src/app/services/models/groupe-response';
+import { UserResponse } from 'src/app/services/models/user-response';
+import { Observable } from 'rxjs/internal/Observable';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -110,8 +116,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
     ]),
   ],
 })
-export class AppExpandTableComponent implements OnInit {
-  dataSource = ELEMENT_DATA;
+export class AppExpandTableComponent implements OnInit { 
+  user:UserResponse;
+  userGroup :number;
+  CallLogsResponse:CallLogsResponse[];
+  role:string[];
+  dataSource :CallLogsResponse[];
   columnsToDisplay = ['Id', 'Number', 'Agent', 'Date', 'Detail'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: PeriodicElement | null = null;
@@ -120,7 +130,7 @@ export class AppExpandTableComponent implements OnInit {
   public pieChartOptions: Partial<ChartOptions> | any;
   public areaChartOptions: Partial<ChartOptions> | any;
   selected: Date | null;
-  constructor() {
+  constructor(private TokenService:TokenService,private LogsService:LogsService,private UserService:UserService) {
     this.doughnutChartOptions = {
       series: [45, 15, 27, 18, 35],
       chart: {
@@ -212,7 +222,8 @@ export class AppExpandTableComponent implements OnInit {
   }
   private wavesurfer: WaveSurfer;
 
-    ngOnInit(): void {
+    ngOnInit(): void { 
+
         this.wavesurfer = WaveSurfer.create({
             container: '#waveform',
             waveColor: 'grey',
@@ -222,7 +233,28 @@ export class AppExpandTableComponent implements OnInit {
             height: 20
         });
         this.wavesurfer.load("../assets/alien_danger.wav");
+        this.UserService.findUserById(this.TokenService.getUserId()).subscribe((user: UserResponse) => {
+          this.user = user;
+          //this.userGroup=user.groupe.id;
+        });
+      
+        this.role=this.TokenService.userRoles;
+        if (this.role.at(0)=='Admin'){
+          this.getAllCallLogs();
+        }else if(this.role.at(0)=='Supervisor'){
+          this.getGroupeCallLogs(this.userGroup);
+        }
     }
+  getGroupeCallLogs(UserId:number ) {
+    this.LogsService.findGroupCallLogs(UserId).subscribe({next:(calls: CallLogsResponse[])=>{
+      this.CallLogsResponse=calls;
+    this.dataSource= this.CallLogsResponse;} })
+  
+  }
+  getAllCallLogs() {
+this.LogsService.findAllCallLogs().subscribe({next:(calls: CallLogsResponse[])=>{
+  this.CallLogsResponse=calls;
+this.dataSource= this.CallLogsResponse;} })}
 
     togglePlay() {
         if (this.wavesurfer.isPlaying()) {

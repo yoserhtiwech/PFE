@@ -6,8 +6,9 @@ import {
   OnChanges,
 } from '@angular/core';
 import { navItems } from './sidebar-data';
+//import{navItems3} from './sidebar-data';
 import { Router } from '@angular/router';
-import { NavService } from '../../../../services/nav.service';
+import { NavService } from '../../../../services/service/nav.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AppHorizontalNavItemComponent } from './nav-item/nav-item.component';
 import { CommonModule } from '@angular/common';
@@ -20,6 +21,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AppHorizontalSidebarComponent implements OnInit {
   navItems = navItems;
+
   parentActive = '';
 
   mobileQuery: MediaQueryList;

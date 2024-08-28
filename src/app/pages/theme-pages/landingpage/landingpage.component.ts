@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { CoreService } from 'src/app/services/core.service';
+import { CoreService } from 'src/app/services/service/core.service';
 import { ViewportScroller } from '@angular/common';
 
 interface apps {

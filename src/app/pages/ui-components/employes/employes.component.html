@@ -9,7 +9,7 @@
                   <i-tabler name="users" class="icon-20 m-r-8"></i-tabler>
                 </mat-icon>
               </div>
-              Users
+              Utilisateur
             </ng-template>
             <div class=" mat-body-1 p-16 rounded m-t-12">
              <mat-card class="cardWithShadow">
@@ -29,7 +29,7 @@
         </div>
         <div class="col-lg-4 d-flex align-items-center justify-content-end">
           <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-            Invite Employee
+            Ajouter Utilisateur
           </button>
         </div>
       </div>
@@ -48,16 +48,12 @@
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Name</th>
             <td mat-cell *matCellDef="let element">
               <div class="d-flex align-items-center">
-                <img
-                  class="rounded-circle"
-                  [src]="element.imagePath"
-                  width="40"
-                />
+                
                 <div class="m-l-16">
                   <p class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                    {{ element.Name }}
+                    {{ element.fullname }}
                   </p>
-                  <small class="mat-body-1 f-s-14">{{ element.Position }}</small>
+                  <small class="mat-body-1 f-s-14">{{ element.poste }}</small>
                 </div>
               </div>
             </td>
@@ -67,7 +63,7 @@
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
               Email
             </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.Email }}</td>
+            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.email}}</td>
           </ng-container>
   
           <ng-container matColumnDef="number">
@@ -75,7 +71,9 @@
               Number
             </th>
             <td mat-cell *matCellDef="let element" class="f-s-14">
-             
+              
+              {{ element.numbers}}
+              
               
                 <!-- <mat-tree [dataSource]="dataSource2" [treeControl]="treeControl">
                   <mat-tree-node
@@ -136,10 +134,10 @@
                     </button>
                   </mat-tree-node>
                 </mat-tree> -->
-                <mat-tree [dataSource]="dataSource2" [treeControl]="treeControl">
+                <!-- <mat-tree [dataSource]="dataSource2" [treeControl]="treeControl">
                   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
                     <div class="node-content">
-                      {{ node.item }}
+                      {{ node.item }} - {{ node.dataSourceItem?.Number }}
                     </div>
                   </mat-tree-node>
                 
@@ -162,11 +160,11 @@
                           {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
                         </mat-icon>
                       </div>
-                      {{ node.item }}
+                      {{ node.item }} - {{ node.dataSourceItem?.Number }}
                     </div>
                   </mat-tree-node>
                 </mat-tree>
-                
+                 -->
             </td>
           </ng-container>
   
@@ -175,7 +173,7 @@
               Date of Joining
             </th>
             <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.DateOfJoining | date : "fullDate" }}
+              {{ element.createdDate |date: 'yyyy-MM-dd'}}
             </td>
           </ng-container>
   
@@ -236,29 +234,29 @@
                   <i-tabler name="users-group" class="icon-20 m-r-8"></i-tabler>
                 </mat-icon>
               </div>
-              Teams
+              Groupes
             </ng-template>
   
             <div class=" mat-body-1 p-16 rounded m-t-12"> 
               <mat-card class="cardWithShadow">
                 <mat-card-content class="p-24">
               <div class="row flex-column"style="display: flex; justify-content: center; align-items: center;">
-                @for(followercard of followercards; track followercard.title) {
+                <ng-container *ngFor="let group of dataSource1"> 
                   <div class="row" style="display: flex; justify-content: center; align-items: center; width: 100%;">
                     <div class="col-sm-6 col-lg-4">
                       <mat-card class="cardWithShadow">
                         <mat-card-content>
                           <div class="d-flex align-items-center">
                             <div class="d-flex align-items-center">
-                              <img src="{{ followercard.imgSrc }}" width="40" alt="user" class="rounded-circle" />
+                            <!-- <img src="{{ followercard.imgSrc }}" width="40" alt="user" class="rounded-circle" /> -->
                               <div class="m-l-16">
-                                <h6 class="m-0 f-w-600 f-s-16">{{ followercard.title }}</h6>
+                                <h6 class="m-0 f-w-600 f-s-16">{{ group.name }}</h6>
                                 <span class="d-flex align-items-center f-s-14"><i-tabler name="map-pin"
-                                    class="icon-14 m-r-4"></i-tabler>{{ followercard.subtext }}</span>
+                                    class="icon-14 m-r-4"></i-tabler></span>
                               </div>
                             </div>
-                            <button mat-flat-button color="primary" class="m-l-auto">
-                              Follow
+                            <button mat-flat-button color="primary" class="m-l-auto"(click)="openInjectDialog(group.name)">
+                              Modifier
                             </button>
                           </div>
                           
@@ -276,7 +274,7 @@
                             <mat-card class="cardWithShadow">
                               <mat-card-content>
                                 <div class="table-responsive m-t-30">
-                                  <table mat-table [dataSource]="dataSource1" class="w-100">
+                                  <table mat-table [dataSource]="group.users" class="w-100">
                                     <!-- Position Column -->
                                     <ng-container matColumnDef="assigned">
                                       <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14 p-l-0">
@@ -284,13 +282,12 @@
                                       </th>
                                       <td mat-cell *matCellDef="let element" class="p-l-0">
                                         <div class="d-flex align-items-center">
-                                          <img [src]="element.imagePath" alt="users" width="40" class="rounded-circle" />
                                           <div class="m-l-16">
                                             <h6 class="mat-subtitle-1 f-s-14 f-w-600">
-                                              {{ element.uname }}
+                                              {{ element.fullname }}
                                             </h6>
                                             <span class="mat-body-1 f-s-12">
-                                              {{ element.position }}
+                                              {{ element.poste }}
                                             </span>
                                           </div>
                                         </div>
@@ -303,7 +300,7 @@
                                         Number
                                       </th>
                                       <td mat-cell *matCellDef="let element" class="mat-body-1">
-                                        {{ element.productName }}
+                                        {{ element.numbers }}
                                       </td>
                                     </ng-container>
                             
@@ -317,7 +314,7 @@
                         
                     </div>
               </div>
-                }
+              </ng-container>
               </div>
             </mat-card-content>
             </mat-card>
